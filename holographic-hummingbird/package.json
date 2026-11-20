@@ -1,0 +1,21 @@
+{
+  "name": "holographic-hummingbird",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "npx hyperframes lint",
+    "check": "npx hyperframes check --json",
+    "snapshot": "npx hyperframes snapshot --at 0.4,1.0,1.7,1.95,3.5,4.6",
+    "render": "npx hyperframes render --fps 30 --quality delivery --output output.mp4",
+    "render:frames": "npx hyperframes render --fps 30 --format png-sequence --output frames",
+    "encode:ffmpeg": "ffmpeg -y -framerate 30 -i frames/frame_%06d.png -c:v libx264 -preset slow -crf 16 -pix_fmt yuv420p -movflags +faststart -an output.mp4"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "hyperframes": "^0.9.71",
+    "three": "^0.187.0"
+  }
+}

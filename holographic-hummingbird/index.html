@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1080, initial-scale=1.0" />
+    <title>Holographic Hummingbird</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./vendor/three.module.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="4.8"
+      data-fps="30"
+      data-width="1080"
+      data-height="1080"
+      data-no-timeline
+    >
+      <canvas id="webgl-canvas" width="1080" height="1080"></canvas>
+      <canvas id="hud-canvas" width="1080" height="1080"></canvas>
+    </div>
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>

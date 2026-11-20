@@ -1,0 +1,39 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 1080px;
+  height: 1080px;
+  overflow: hidden;
+  background: #000000;
+}
+
+#root {
+  position: relative;
+  width: 1080px;
+  height: 1080px;
+  overflow: hidden;
+  background: #000000;
+}
+
+#webgl-canvas,
+#hud-canvas {
+  position: absolute;
+  inset: 0;
+  width: 1080px;
+  height: 1080px;
+  display: block;
+}
+
+#webgl-canvas {
+  z-index: 1;
+}
+
+#hud-canvas {
+  z-index: 2;
+  pointer-events: none;
+}

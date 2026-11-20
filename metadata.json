@@ -1,0 +1,6 @@
+{
+  "name": "Holographic Hummingbird",
+  "description": "Procedural 3D WebGL & GLSL holographic hummingbird short film (1080x1080, 4.8s, 30fps) rendered with HyperFrames and FFmpeg.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
