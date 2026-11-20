@@ -375,7 +375,7 @@ export function createOverlayRenderer(canvas, webglCanvas) {
       -0.4
     );
 
-    // Track Far Wingtip (Left wing -Z, steps downward in side profile to stay clear of Right wing label)
+    // Track Far Wingtip (Left wing -Z, steps cleanly right in side profile away from Gorget & Beak)
     drawTrackedTarget(
       ctx,
       projectedMarkers.wingTipLeft,
@@ -383,9 +383,9 @@ export function createOverlayRenderer(canvas, webglCanvas) {
       "#818cf8",
       hudAlpha * lerp(0.88, 0.58, turnT),
       28,
-      54,
-      lerp(0.5, 0.75, turnT),
-      lerp(-0.6, 0.9, turnT)
+      56,
+      lerp(0.5, 0.95, turnT),
+      lerp(-0.6, 0.15, turnT)
     );
 
     // Track Tail Feathers
@@ -411,9 +411,9 @@ export function createOverlayRenderer(canvas, webglCanvas) {
         "#f43f9e",
         sideFocusAlpha * 0.92,
         34,
-        62,
-        0.5,
-        0.55
+        74,
+        0.25,
+        1.0
       );
 
       // Fine holographic measurement arc from eye/head out to needle beak tip

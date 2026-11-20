@@ -110,9 +110,9 @@ export function createBodyShaderMaterial() {
         vec3 bodyCore = mix(deepIndigo, holoBlue * 0.42, keyDiff * 0.75 + dorsalMask * 0.25) * featherTex;
 
         // Anatomical throat gorget mask: chin & ventral neck (forward +X, upper chest/throat)
-        float gorgetX = smoothstep(0.08, 0.25, vLocalPos.x) * (1.0 - smoothstep(0.46, 0.56, vLocalPos.x));
-        float gorgetY = smoothstep(-0.04, 0.14, vLocalPos.y) * (1.0 - smoothstep(0.43, 0.52, vLocalPos.y));
-        float gorgetFront = smoothstep(-0.28, 0.25, vNormalL.x - vNormalL.y * 0.30);
+        float gorgetX = smoothstep(0.02, 0.16, vLocalPos.x) * (1.0 - smoothstep(0.36, 0.44, vLocalPos.x));
+        float gorgetY = smoothstep(0.08, 0.22, vLocalPos.y) * (1.0 - smoothstep(0.46, 0.54, vLocalPos.y));
+        float gorgetFront = smoothstep(-0.22, 0.30, vNormalL.x - vNormalL.y * 0.20);
         float gorgetMask = clamp(gorgetX * gorgetY * gorgetFront, 0.0, 1.0);
 
         // Gorget structural iridescence: shifts dynamically as bird rotates into side profile

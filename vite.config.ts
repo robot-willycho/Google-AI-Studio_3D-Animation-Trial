@@ -31,6 +31,7 @@ export default defineConfig(() => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
+        three: path.resolve(__dirname, 'holographic-hummingbird/vendor/three.module.js'),
       },
     },
     server: {

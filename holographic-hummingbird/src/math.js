@@ -42,15 +42,33 @@ export function hash12(a, b) {
   return s - Math.floor(s);
 }
 
-// Wingbeat phase integral: smooth variable frequency without phase jumps
-// Beat rate: ~5.2 Hz during 1.2-2.7s hover, easing to ~4.6 Hz during 2.7-4.8s side hover
+// Exact C2-continuous wingbeat phase integral:
+// Beat rate: 5.2 Hz during 1.2-2.6s hover, smoothly easing to 4.6 Hz over [2.6, 3.6] without phase/frequency dips.
+const WING_BASE_FREQ = 5.2;
+const WING_SLOW_DELTA = -0.6;
+const WING_TRANS_START = 2.6;
+const WING_TRANS_DUR = 1.0;
+
+export function getWingFreq(t) {
+  const turnBlend = smootherstep(WING_TRANS_START, WING_TRANS_START + WING_TRANS_DUR, t);
+  return WING_BASE_FREQ + WING_SLOW_DELTA * turnBlend;
+}
+
 export function getWingPhase(t) {
-  const baseFreq = 5.2;
-  const slowDelta = -0.6;
-  const turnBlend = smootherstep(2.6, 3.6, t);
-  // Analytic blend approx + subtle modulation
-  const effectiveFreq = baseFreq + slowDelta * turnBlend;
-  return t * effectiveFreq * Math.PI * 2;
+  let blendIntegral = 0;
+  if (t > WING_TRANS_START) {
+    const end = WING_TRANS_START + WING_TRANS_DUR;
+    if (t >= end) {
+      // Integral of smootherstep over [0, 1] is exactly 0.5
+      blendIntegral = 0.5 * WING_TRANS_DUR + (t - end);
+    } else {
+      const u = (t - WING_TRANS_START) / WING_TRANS_DUR;
+      // Antiderivative of 10u^3 - 15u^4 + 6u^5 is 2.5u^4 - 3u^5 + u^6
+      const u4 = u * u * u * u;
+      blendIntegral = WING_TRANS_DUR * (2.5 * u4 - 3.0 * u4 * u + u4 * u * u);
+    }
+  }
+  return (WING_BASE_FREQ * t + WING_SLOW_DELTA * blendIntegral) * Math.PI * 2;
 }
 
 // Deterministic glitch intensity in [0, 1] during 1.2 - 2.7s
@@ -94,16 +112,17 @@ export function getChoreography(t) {
 
   // Gentle pitch & roll hover dynamics
   const wingPhase = getWingPhase(t);
+  const wingFreq = getWingFreq(t);
   const hoverBobY =
     Math.sin(t * 2.2) * 0.032 +
     Math.sin(wingPhase * 2.0 - 0.5) * 0.020 * birdReveal;
   // Keep bird centered horizontally inside 1080x1080 frame
-  const hoverDriftX = lerp(-0.04, -0.06, turnT) + Math.cos(t * 1.5) * 0.02;
+  const hoverDriftX = lerp(-0.04, -0.05, turnT) + Math.cos(t * 1.5) * 0.02;
   const bodyRoll = Math.sin(t * 1.8) * 0.03 * (1 - turnT * 0.65);
 
-  // Calibrated camera framing so wingspan, beak & tail stay comfortably inside frame
-  const camZ = lerp(7.40, 6.95, turnT);
-  const camY = lerp(0.24, 0.22, turnT);
+  // Calibrated camera framing so wingspan, beak & downward tail stay comfortably centered
+  const camZ = lerp(7.70, 7.15, turnT);
+  const camY = lerp(0.14, 0.12, turnT);
   const camX = lerp(0.04, 0.04, turnT);
 
   return {
@@ -112,6 +131,7 @@ export function getChoreography(t) {
     turnT,
     yaw,
     wingPhase,
+    wingFreq,
     hoverBobY,
     hoverDriftX,
     bodyRoll,
